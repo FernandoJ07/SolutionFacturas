@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -56,81 +57,35 @@ namespace FacturaApi.Controllers
             return Ok(supervisor);
         }
 
-        //// PUT: api/Supervisors/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutSupervisor(decimal id, Supervisor supervisor)
-        //{
-        //    if (id != supervisor.Idsupervisor)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(supervisor).State = EntityState.Modified;
+        // POST: api/Supervisors
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Supervisor>> PostSupervisor(Supervisor supervisor)
+        {
+            if (supervisor == null)
+            {
+                return BadRequest("El supervisor no puede ser vacio.");
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!SupervisorExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                var resultado = await _supervisorService.Add(supervisor);
+                if (!resultado)
+                {
+                    return Conflict("El supervisor ya existe.");
+                }
 
-        //    return NoContent();
-        //}
+                return CreatedAtAction(nameof(GetSupervisor), new { id = supervisor.Idsupervisor}, supervisor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al guardar el cliente: {ex.Message}");
+            }
 
-        //// POST: api/Supervisors
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Supervisor>> PostSupervisor(Supervisor supervisor)
-        //{
-        //    _context.Supervisors.Add(supervisor);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (SupervisorExists(supervisor.Idsupervisor))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            return CreatedAtAction("GetSupervisor", new { id = supervisor.Idsupervisor }, supervisor);
+        }
 
-        //    return CreatedAtAction("GetSupervisor", new { id = supervisor.Idsupervisor }, supervisor);
-        //}
 
-        //// DELETE: api/Supervisors/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteSupervisor(decimal id)
-        //{
-        //    var supervisor = await _context.Supervisors.FindAsync(id);
-        //    if (supervisor == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Supervisors.Remove(supervisor);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool SupervisorExists(decimal id)
-        //{
-        //    return _context.Supervisors.Any(e => e.Idsupervisor == id);
-        //}
     }
 }

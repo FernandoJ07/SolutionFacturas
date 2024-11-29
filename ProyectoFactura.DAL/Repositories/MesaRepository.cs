@@ -26,24 +26,12 @@ namespace ProyectoFactura.DAL.Repositories
             return true;
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            Mesa mesa = await _dbcontext.Mesas.FindAsync(id);
-            if (mesa == null)
-            {
-                return false;
-            }
-            _dbcontext.Mesas.Remove(mesa);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<IQueryable<Mesa>> GetAll()
+        public async Task<List<Mesa>> GetAll()
         {
             return _dbcontext.Mesas
                               .Include(m => m.Facturas)
                                 .ThenInclude(f => f.Detallexfacturas)
-                              .AsQueryable();
+                              .ToList();
         }
 
         public async Task<Mesa> GetById(object id)
@@ -53,13 +41,6 @@ namespace ProyectoFactura.DAL.Repositories
                          .Include(m => m.Facturas)
                              .ThenInclude(f => f.Detallexfacturas)
                          .FirstOrDefaultAsync(m => m.Nromesa == Nromesa);
-        }
-
-        public async Task<bool> Update(Mesa mesa)
-        {
-            _dbcontext.Mesas.Update(mesa);
-            await _dbcontext.SaveChangesAsync();
-            return true;
         }
     }
 }

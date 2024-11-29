@@ -12,8 +12,6 @@ namespace ProyectoFactura.BLL.Service
         Task<List<Mesero>> GetAll();
         Task<Mesero> GetById(object id);
         Task<bool> Add(Mesero entity);
-        Task<bool> Update(Mesero entity);
-        Task<bool> Delete(object id);
 
         Task<List<object>> GetTotalVendidoPorMesero(DateTime fechaInicio, DateTime fechaFin);
     }

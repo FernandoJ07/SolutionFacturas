@@ -33,6 +33,7 @@ public partial class ModelContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder
             .HasDefaultSchema("USER_FACTURA")
             .UseCollation("USING_NLS_COMP");

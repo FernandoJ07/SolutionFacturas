@@ -55,37 +55,6 @@ namespace FacturaApi.Controllers
             return Ok(cliente);
         }
 
-        // PUT: api/Meseros/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutMesero(decimal id, Mesero mesero)
-        //{
-        //    if (id != mesero.Idmesero)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _meseroService.Entry(mesero).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _meseroService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MeseroExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/Meseros
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -111,27 +80,6 @@ namespace FacturaApi.Controllers
                 return StatusCode(500, $"Error al guardar el cliente: {ex.Message}");
             }
         }
-
-        //// DELETE: api/Meseros/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteMesero(decimal id)
-        //{
-        //    var mesero = await _meseroService.Meseros.FindAsync(id);
-        //    if (mesero == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _meseroService.Meseros.Remove(mesero);
-        //    await _meseroService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool MeseroExists(decimal id)
-        //{
-        //    return _meseroService.Meseros.Any(e => e.Idmesero == id);
-        //}
 
         [HttpGet("total-vendido-meseros")]
         public async Task<ActionResult<List<object>>> GetTotalVendidoPorMesero([FromQuery] DateTime fechaInicio, [FromQuery] DateTime fechaFin)

@@ -27,23 +27,12 @@ namespace ProyectoFactura.DAL.Repositories
             return true;
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            Supervisor supervisor = await _dbcontext.Supervisors.FindAsync(id);
-            if (supervisor == null)
-            {
-                return false;
-            }
-            _dbcontext.Supervisors.Remove(supervisor);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
 
-        public async Task<IQueryable<Supervisor>> GetAll()
+        public async Task<List<Supervisor>> GetAll()
         {
             return _dbcontext.Supervisors
                              .Include(f => f.Detallexfacturas)
-                             .AsQueryable();
+                             .ToList();
         }
 
         public async Task<Supervisor> GetById(object id)

@@ -28,17 +28,12 @@ namespace ProyectoFactura.BLL.Service
             return await _clientRepo.Add(cliente);
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            return await _clientRepo.Delete(id);
-        }
-
         public async Task<List<Cliente>> GetAll()
         {
             try
             {
                 var clientes = await _clientRepo.GetAll();
-                return clientes.ToList();
+                return clientes;
             }
             catch (Exception ex)
             {
@@ -53,12 +48,6 @@ namespace ProyectoFactura.BLL.Service
             return cliente == null ? throw new Exception("Cliente no encontrado") : cliente;
         }
 
-        public async Task<bool> Update(Cliente cliente)
-        {
-            return await _clientRepo.Update(cliente);
-        }
-
-        //Lógica de negocio es decir lo que se pide hacer con los datos en la prueba tecnica ;)
 
         public async Task<List<Object>> GetClientesPorConsumo(decimal valorMinimo, DateTime fechaInicio, DateTime fechaFin)
         {

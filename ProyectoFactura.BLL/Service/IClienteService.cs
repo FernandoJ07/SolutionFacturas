@@ -12,8 +12,6 @@ namespace ProyectoFactura.BLL.Service
         Task<List<Cliente>> GetAll();
         Task<Cliente> GetById(object id);
         Task<bool> Add(Cliente entity);
-        Task<bool> Update(Cliente entity);
-        Task<bool> Delete(object id);
 
         Task<List<Object>> GetClientesPorConsumo(decimal valorMinimo, DateTime fechaInicio, DateTime fechaFin);
     }

@@ -44,24 +44,12 @@ namespace ProyectoFactura.DAL.Repositories
             return _dbcontext.Meseros.Any(e => e.Idmesero == id);
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            Mesero mesero = await _dbcontext.Meseros.FindAsync(id);
-            if (mesero == null)
-            {
-                return false;
-            }
-            _dbcontext.Meseros.Remove(mesero);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<IQueryable<Mesero>> GetAll()
+        public async Task<List<Mesero>> GetAll()
         {
             return _dbcontext.Meseros
                              .Include(m => m.Facturas)
                              .ThenInclude(f => f.Detallexfacturas)
-                             .AsQueryable();
+                             .ToList();
         }
 
         public async Task<Mesero> GetById(object id)
@@ -74,11 +62,5 @@ namespace ProyectoFactura.DAL.Repositories
 
         }
 
-        public async Task<bool> Update(Mesero mesero)
-        {
-            _dbcontext.Meseros.Update(mesero);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
     }
 }

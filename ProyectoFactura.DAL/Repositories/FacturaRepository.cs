@@ -25,19 +25,7 @@ namespace ProyectoFactura.DAL.Repositories
             return true;
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            Factura factura = await _dbcontext.Facturas.FindAsync(id);
-            if (factura == null)
-            {
-                return false;
-            }
-            _dbcontext.Facturas.Remove(factura);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<IQueryable<Factura>> GetAll()
+        public async Task<List<Factura>> GetAll()
         {
             return _dbcontext.Facturas
                              .Include(f => f.IdclienteNavigation)
@@ -45,7 +33,7 @@ namespace ProyectoFactura.DAL.Repositories
                              .Include(f => f.IdmeseroNavigation)
                              .Include(f => f.Detallexfacturas)
                                 .ThenInclude(d => d.IdsupervisorNavigation)
-                             .AsQueryable();
+                             .ToList();
         }
 
         public async Task<Factura> GetById(object id)
@@ -56,13 +44,6 @@ namespace ProyectoFactura.DAL.Repositories
                          .Include(f => f.Detallexfacturas)
                             .ThenInclude(d => d.IdsupervisorNavigation)
                          .FirstOrDefaultAsync(f => f.Nrofactura == facturaId);
-        }
-
-        public async Task<bool> Update(Factura factura)
-        {
-            _dbcontext.Facturas.Update(factura);
-            await _dbcontext.SaveChangesAsync();
-            return true;
         }
     }
 }

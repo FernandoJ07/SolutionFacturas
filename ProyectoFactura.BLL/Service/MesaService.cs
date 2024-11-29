@@ -20,12 +20,13 @@ namespace ProyectoFactura.BLL.Service
         }
         public async Task<bool> Add(Mesa mesa)
         {
-            return await _mesaRepository.Add(mesa);
-        }
+            string mesaId = Convert.ToString(mesa.Nromesa);
+            if (string.IsNullOrEmpty(mesaId))
+            {
+                throw new ArgumentException("La identificacion de la mesa no puede ser nula o vacía.");
+            }
 
-        public async Task<bool> Delete(object id)
-        {
-            return await _mesaRepository.Delete(id);
+            return await _mesaRepository.Add(mesa);
         }
 
         public async Task<List<Mesa>> GetAll()
@@ -33,7 +34,7 @@ namespace ProyectoFactura.BLL.Service
             try
             {
                 var mesas = await _mesaRepository.GetAll();
-                return mesas.ToList();
+                return mesas;
             }
             catch (Exception ex)
             {
@@ -48,9 +49,5 @@ namespace ProyectoFactura.BLL.Service
             return mesa == null ? throw new Exception("Mesa no encontrada") : mesa;
         }
 
-        public async Task<bool> Update(Mesa mesa)
-        {
-            return await _mesaRepository.Update(mesa);
-        }
     }
 }

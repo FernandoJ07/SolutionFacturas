@@ -12,7 +12,5 @@ namespace ProyectoFactura.BLL.Service
         Task<List<Supervisor>> GetAll();
         Task<Supervisor> GetById(object id);
         Task<bool> Add(Supervisor entity);
-        Task<bool> Update(Supervisor entity);
-        Task<bool> Delete(object id);
     }
 }

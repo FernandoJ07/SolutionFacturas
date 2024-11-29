@@ -28,17 +28,12 @@ namespace ProyectoFactura.BLL.Service
             return await _meseroRepo.Add(mesero);
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            return await _meseroRepo.Delete(id);
-        }
-
         public async Task<List<Mesero>> GetAll()
         {
             try
             {
                 var meseros = await _meseroRepo.GetAll();
-                return meseros.ToList();
+                return meseros;
             }
             catch (Exception ex)
             {
@@ -52,13 +47,6 @@ namespace ProyectoFactura.BLL.Service
             var mesero = await _meseroRepo.GetById(id);
             return mesero == null ? throw new Exception("Mesero no encontrado") : mesero;
         }
-
-        public async Task<bool> Update(Mesero mesero)
-        {
-            return await _meseroRepo.Update(mesero);
-        }
-
-        //Lógica de negocio es decir lo que se pide hacer con los datos en la prueba tecnica ;)
 
         public async Task<List<object>> GetTotalVendidoPorMesero(DateTime fechaInicio, DateTime fechaFin)
         {

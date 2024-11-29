@@ -13,8 +13,6 @@ namespace ProyectoFactura.BLL.Service
         Task<List<Factura>> GetAll();
         Task<Factura> GetById(object id);
         Task<bool> Add(FacturaDTO entity);
-        Task<bool> Update(Factura entity);
-        Task<bool> Delete(object id);
 
         Task<object> GetProductoMasVendidoEnMes(int anio, int mes);
     }

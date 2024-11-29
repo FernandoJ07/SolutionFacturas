@@ -57,37 +57,6 @@ namespace FacturaApi.Controllers
             return Ok(factura);
         }
 
-        //    // PUT: api/Facturas/5
-        //    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //    [HttpPut("{id}")]
-        //    public async Task<IActionResult> PutFactura(decimal id, Factura factura)
-        //    {
-        //        if (id != factura.Nrofactura)
-        //        {
-        //            return BadRequest();
-        //        }
-
-        //        _context.Entry(factura).State = EntityState.Modified;
-
-        //        try
-        //        {
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!FacturaExists(id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-
-        //        return NoContent();
-        //    }
-
         // POST: api/Facturas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -114,28 +83,6 @@ namespace FacturaApi.Controllers
                 return StatusCode(500, $"Error al registrar la factura: {ex.Message}");
             }
         }
-
-
-        //    //DELETE: api/Facturas/5
-        //    [HttpDelete("{id}")]
-        //    public async Task<IActionResult> DeleteFactura(decimal id)
-        //    {
-        //        var factura = await _context.Facturas.FindAsync(id);
-        //        if (factura == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        _context.Facturas.Remove(factura);
-        //        await _context.SaveChangesAsync();
-
-        //        return NoContent();
-        //    }
-
-        //    private bool FacturaExists(decimal id)
-        //    {
-        //        return _context.Facturas.Any(e => e.Nrofactura == id);
-        //    }
 
 
         // GET: api/Facturas/producto-mas-vendido

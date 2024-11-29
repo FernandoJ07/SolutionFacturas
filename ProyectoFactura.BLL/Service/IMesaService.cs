@@ -12,7 +12,5 @@ namespace ProyectoFactura.BLL.Service
         Task<List<Mesa>> GetAll();
         Task<Mesa> GetById(object id);
         Task<bool> Add(Mesa entity);
-        Task<bool> Update(Mesa entity);
-        Task<bool> Delete(object id);
     }
 }

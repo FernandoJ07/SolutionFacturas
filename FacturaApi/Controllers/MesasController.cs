@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -55,81 +56,32 @@ namespace FacturaApi.Controllers
             return Ok(mesa);
         }
 
-        //// PUT: api/Mesas/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutMesa(decimal id, Mesa mesa)
-        //{
-        //    if (id != mesa.Nromesa)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(mesa).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MesaExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
+        
         //// POST: api/Mesas
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Mesa>> PostMesa(Mesa mesa)
-        //{
-        //    _context.Mesas.Add(mesa);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (MesaExists(mesa.Nromesa))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        [HttpPost]
+        public async Task<ActionResult<Mesa>> PostMesa(Mesa mesa)
+        {
+            if (mesa == null)
+            {
+                return BadRequest("La mesa no puede ser vacio.");
+            }
 
-        //    return CreatedAtAction("GetMesa", new { id = mesa.Nromesa }, mesa);
-        //}
+            try
+            {
+                var resultado = await _mesaService.Add(mesa);
+                if (!resultado)
+                {
+                    return Conflict("La mesa ya existe.");
+                }
 
-        //// DELETE: api/Mesas/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteMesa(decimal id)
-        //{
-        //    var mesa = await _context.Mesas.FindAsync(id);
-        //    if (mesa == null)
-        //    {
-        //        return NotFound();
-        //    }
+                return CreatedAtAction(nameof(GetMesa), new { id = mesa.Nromesa }, mesa);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al guardar el cliente: {ex.Message}");
+            }
+        }
 
-        //    _context.Mesas.Remove(mesa);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool MesaExists(decimal id)
-        //{
-        //    return _context.Mesas.Any(e => e.Nromesa == id);
-        //}
+        
     }
 }

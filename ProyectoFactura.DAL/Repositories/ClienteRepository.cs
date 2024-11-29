@@ -1,4 +1,4 @@
-﻿using System;
+﻿                                                                                                                    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +29,7 @@ namespace ProyectoFactura.DAL.Repositories
             }
             catch (DbUpdateException)
             {
-                if (ClienteExists(cliente.Identificacion))
+                if (await ClienteExists(cliente.Identificacion))
                 {
                     return false;
                 }
@@ -38,31 +38,19 @@ namespace ProyectoFactura.DAL.Repositories
                     throw;
                 }
             }
-
         }
-        private bool ClienteExists(string id)
+        private async Task<bool> ClienteExists(string id)
         {
-            return _dbcontext.Clientes.Any(e => e.Identificacion == id);
+            return await _dbcontext.Clientes.FindAsync(id) != null;
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            Cliente cliente = await _dbcontext.Clientes.FindAsync(id);
-            if (cliente == null)
-            {
-                return false;
-            }
-            _dbcontext.Clientes.Remove(cliente);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
 
-        public async Task<IQueryable<Cliente>> GetAll()
+        public async Task<List<Cliente>> GetAll()
         {
             return _dbcontext.Clientes
                              .Include(c => c.Facturas)
                              .ThenInclude(f => f.Detallexfacturas)
-                             .AsQueryable();
+                             .ToList();
         }
 
         public async Task<Cliente> GetById(object id)
@@ -73,11 +61,5 @@ namespace ProyectoFactura.DAL.Repositories
                         .FirstOrDefaultAsync(c => c.Identificacion == id);
         }
 
-        public async Task<bool> Update(Cliente cliente)
-        {
-            _dbcontext.Clientes.Update(cliente);
-            await _dbcontext.SaveChangesAsync();
-            return true;
-        }
     }
 }

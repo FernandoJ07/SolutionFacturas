@@ -20,12 +20,13 @@ namespace ProyectoFactura.BLL.Service
 
         public async Task<bool> Add(Supervisor supervisor)
         {
-            return await _supervisorRepository.Add(supervisor);
-        }
+            string supervisorId = Convert.ToString(supervisor.Idsupervisor);
+            if (string.IsNullOrEmpty(supervisorId))
+            {
+                throw new ArgumentException("La identificación del supervisor no puede ser nula o vacía.");
+            }
 
-        public async Task<bool> Delete(object id)
-        {
-            return await _supervisorRepository.Delete(id);
+            return await _supervisorRepository.Add(supervisor);
         }
 
         public async Task<List<Supervisor>> GetAll()
@@ -33,7 +34,7 @@ namespace ProyectoFactura.BLL.Service
             try
             {
                 var supervisores = await _supervisorRepository.GetAll();
-                return supervisores.ToList();
+                return supervisores;
             }
             catch (Exception ex)
             {
@@ -48,9 +49,5 @@ namespace ProyectoFactura.BLL.Service
             return supervisor == null ? throw new Exception("Supervisor no encontrado") : supervisor;
         }
 
-        public async Task<bool> Update(Supervisor supervisor)
-        {
-            return await _supervisorRepository.Update(supervisor);
-        }
     }
 }

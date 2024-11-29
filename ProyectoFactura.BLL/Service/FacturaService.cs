@@ -40,17 +40,12 @@ namespace ProyectoFactura.BLL.Service
             return await _facturaRepository.Add(factura);
         }
 
-        public async Task<bool> Delete(object id)
-        {
-            return await _facturaRepository.Delete(id);
-        }
-
         public async Task<List<Factura>> GetAll()
         {
             try
             {
                 var facturas = await _facturaRepository.GetAll();
-                return facturas.ToList();
+                return facturas;
             }
             catch (Exception ex)
             {
@@ -65,11 +60,7 @@ namespace ProyectoFactura.BLL.Service
             return factura == null ? throw new Exception("Factura no encontrada") : factura;
         }
 
-        public async Task<bool> Update(Factura factura)
-        {
-            return await _facturaRepository.Update(factura);
-        }
-
+        
         public async Task<object> GetProductoMasVendidoEnMes(int anio, int mes)
         {
             var facturas = await _facturaRepository.GetAll();
