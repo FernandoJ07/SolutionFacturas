@@ -14,30 +14,43 @@ namespace ProyectoFactura.BLL.Service
     {
 
         private readonly IGenericRepository<Factura> _facturaRepository;
+        private readonly IGenericRepository<Detallexfactura> _detalleRepository;
 
-        public FacturaService(IGenericRepository<Factura> facturaRepo)
+        public FacturaService(IGenericRepository<Factura> facturaRepo, IGenericRepository<Detallexfactura> detalleRepo)
         {
             _facturaRepository = facturaRepo;
+            _detalleRepository = detalleRepo;
         }
         public async Task<bool> Add(FacturaDTO facturaDto)
         {
             var factura = new Factura
             {
-                Nrofactura = facturaDto.Nrofactura,
                 Idcliente = facturaDto.Idcliente,
                 Nromesa = facturaDto.Nromesa,
                 Idmesero = facturaDto.Idmesero,
-                Fecha = facturaDto.Fecha,
-                Detallexfacturas = facturaDto.Detallexfacturas.Select(d => new Detallexfactura
-                {
-                    Nrofactura = d.Nrofactura,
-                    Iddetallexfactura = d.Iddetallexfactura,
-                    Idsupervisor = d.Idsupervisor,
-                    Plato = d.Plato,
-                    Valor = d.Valor
-                }).ToList()
+                Fecha = facturaDto.Fecha
             };
-            return await _facturaRepository.Add(factura);
+
+            var result = await _facturaRepository.Add(factura);
+            if (!result)
+            {
+                return false;
+            }
+
+            foreach (var detalleDto in facturaDto.Detallexfacturas)
+            {
+                var detalle = new Detallexfactura
+                {
+                    Nrofactura = factura.Nrofactura,
+                    Iddetallexfactura = detalleDto.Iddetallexfactura,
+                    Idsupervisor = detalleDto.Idsupervisor,
+                    Plato = detalleDto.Plato,
+                    Valor = detalleDto.Valor
+                };
+                await _detalleRepository.Add(detalle);
+            }
+
+            return true;
         }
 
         public async Task<List<Factura>> GetAll()

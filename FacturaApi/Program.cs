@@ -42,6 +42,8 @@ builder.Services.AddScoped<IMesaService, MesaService>();
 builder.Services.AddScoped<IGenericRepository<Factura>, FacturaRepository>();
 builder.Services.AddScoped<IFacturaService, FacturaService>();
 
+builder.Services.AddScoped<IGenericRepository<Detallexfactura>, DetalleFacturaRepository>();
+
 
 
 
