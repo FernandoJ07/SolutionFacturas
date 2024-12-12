@@ -3,6 +3,7 @@ using ProyectoFactura.BLL.Service;
 using ProyectoFactura.DAL.DataContext;
 using ProyectoFactura.DAL.Repositories;
 using ProyectoFactura.Models;
+using Microsoft.AspNetCore.Cors; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("oracleConnection");
 builder.Services.AddDbContext<ModelContext>(options => options.UseOracle(connectionString));
-
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,8 +44,14 @@ builder.Services.AddScoped<IFacturaService, FacturaService>();
 
 builder.Services.AddScoped<IGenericRepository<Detallexfactura>, DetalleFacturaRepository>();
 
-
-
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder => builder.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -62,6 +68,9 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// Use CORS policy
+app.UseCors("AllowLocalhost");
 
 app.MapControllers();
 
