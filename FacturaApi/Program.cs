@@ -48,12 +48,39 @@ builder.Services.AddScoped<IGenericRepository<Detallexfactura>, DetalleFacturaRe
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
-        builder => builder.WithOrigins("http://localhost:5173")
+        builder => builder.WithOrigins("https://facturaspruebatecnicaqualita.vercel.app")
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var context = services.GetRequiredService<ModelContext>();
+        context.Database.CanConnect();
+        logger.LogInformation("Conexión a la base de datos exitosa.");
+
+        // Consulta para validar si la tabla Clientes existe
+        var clientes = context.Clientes.ToList();
+        if (clientes.Any())
+        {
+            logger.LogInformation("La tabla Clientes existe y contiene datos.");
+        }
+        else
+        {
+            logger.LogInformation("La tabla Clientes existe pero no contiene datos.");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Ocurrió un error al intentar conectar a la base de datos o al consultar la tabla Clientes.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -67,10 +94,10 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 // Use CORS policy
 app.UseCors("AllowLocalhost");
+
+app.UseAuthorization();
 
 app.MapControllers();
 
